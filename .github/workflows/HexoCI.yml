@@ -50,5 +50,5 @@ jobs:
       run: |
         git config --global user.name "fengqishiwangxiangni"
         git config --global user.email "2039759240@qq.com"
-        git clone 博客静态文件仓库地址 .deploy_git # clone 静态文件仓库，防止 Hexo 推送时覆盖整个静态文件仓库，只推送有更改的文件
+        # git clone 博客静态文件仓库地址 .deploy_git # clone 静态文件仓库，防止 Hexo 推送时覆盖整个静态文件仓库，只推送有更改的文件
         hexo deploy

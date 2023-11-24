@@ -42,4 +42,5 @@ jobs:
       run: |
         hexo clean
         hexo generate
+        git clone https://github.com/fengqishiwangxiangni/fengqishiwangxiangni.github.io.git .deploy_git
         hexo deploy
