@@ -8,7 +8,7 @@ on:
 env:
   GIT_USER: fengqishiwangxiangni
   GIT_EMAIL: 2039759240@qq.com
-  # THEME_REPO: butterfly
+  THEME_REPO: jerryc127/hexo-theme-butterfly
   THEME_BRANCH: master
   DEPLOY_REPO: fengqishiwangxiangni/fengqishiwangxiangni.github.io
   DEPLOY_BRANCH: master
