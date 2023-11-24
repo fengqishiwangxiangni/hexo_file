@@ -27,3 +27,8 @@ jobs:
           echo "$HEXO_DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: 推送hexo源文件
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.token }}
+          repository: ${{ env.BLOG_SOURCE }}
