@@ -16,6 +16,6 @@ jobs:
         uses: xjshi/hexo-deploy-github-pages-action@master
         env:
           PERSONAL_TOKEN: ${{ secrets.GENERATE_HEXO_STATIC_FILES }} # secret 名，需要跟源码库设置中添加的secret名一致。
-          PUBLISH_REPOSITORY: username/username.github.io # 网页库，格式：用户名/仓库名
+          PUBLISH_REPOSITORY: fengqishiwangxiangni/fengqishiwangxiangni.github.io # 网页库，格式：用户名/仓库名
           BRANCH: master # 构建后的网页要推送到网页库的分支
           PUBLISH_DIR: ./public # 部署 public 目录下的文件，hexo 一般都是这个目录，可根据实际调整
