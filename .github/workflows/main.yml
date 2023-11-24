@@ -61,7 +61,11 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+          npm install hexo-cli -g
+          npm install
+          npm install hexo-renderer-pug hexo-renderer-stylus
 
       - name: Deploy hexo
         run: |
-          npm run deploy
+          hexo g
+          hexo d
