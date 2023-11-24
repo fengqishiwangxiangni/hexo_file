@@ -1,71 +1,21 @@
-name: CI
-
+name: 部署 GitHub Pages
 on:
   push:
     branches:
-      - main
-
-env:
-  GIT_USER: fengqishiwangxiangni
-  GIT_EMAIL: 2039759240@qq.com
-  THEME_REPO: jerryc127/hexo-theme-butterfly
-  THEME_BRANCH: master
-  DEPLOY_REPO: fengqishiwangxiangni/fengqishiwangxiangni.github.io
-  DEPLOY_BRANCH: master
+      - master # 源码库的分支，该分支有提交时，就出发该action
 
 jobs:
-  build:
-    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+  build-and-deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node_version: [12.x]
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
 
-      - name: Checkout theme repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.THEME_REPO }}
-          ref: ${{ env.THEME_BRANCH }}
-          path: themes/concise
-
-      - name: Checkout deploy repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.DEPLOY_REPO }}
-          ref: ${{ env.DEPLOY_BRANCH }}
-          path: .deploy_git
-
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node_version }}
-
-      - name: Configuration environment
+      - name: Build and Deploy
+        # 使用专门部署 Hexo 到 GitHub pages 的 action（可以fork后根据需要修改）
+        uses: xjshi/hexo-deploy-github-pages-action@master
         env:
-          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
-        run: |
-          sudo timedatectl set-timezone "Asia/Shanghai"
-          mkdir -p ~/.ssh/
-          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name "fengqishiwangxiangni"
-          git config --global user.email "2039759240@qq.com"
-          cp _config.theme.yml themes/concise/_config.yml
-
-      - name: Install dependencies
-        run: |
-          npm install
-          npm install hexo-cli -g
-          npm install
-          npm install hexo-renderer-pug hexo-renderer-stylus
-
-      - name: Deploy hexo
-        run: |
-          hexo g
-          hexo d
+          PERSONAL_TOKEN: ${{ secrets.GENERATE_HEXO_STATIC_FILES }} # secret 名，需要跟源码库设置中添加的secret名一致。
+          PUBLISH_REPOSITORY: username/username.github.io # 网页库，格式：用户名/仓库名
+          BRANCH: master # 构建后的网页要推送到网页库的分支
+          PUBLISH_DIR: ./public # 部署 public 目录下的文件，hexo 一般都是这个目录，可根据实际调整
