@@ -2,7 +2,7 @@ name: 部署 GitHub Pages
 on:
   push:
     branches:
-      - master # 源码库的分支，该分支有提交时，就出发该action
+      - main # 源码库的分支，该分支有提交时，就出发该action
 
 jobs:
   build-and-deploy:
