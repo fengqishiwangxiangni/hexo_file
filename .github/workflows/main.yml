@@ -10,7 +10,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-
+      - name: 推送hexo源文件
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.token }}
+          repository: ${{ env.BLOG_SOURCE }}
       - name: Build and Deploy
         # 使用专门部署 Hexo 到 GitHub pages 的 action（可以fork后根据需要修改）
         uses: xjshi/hexo-deploy-github-pages-action@master
@@ -27,8 +31,3 @@ jobs:
           echo "$HEXO_DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-      - name: 推送hexo源文件
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.token }}
-          repository: ${{ env.BLOG_SOURCE }}
