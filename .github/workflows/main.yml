@@ -8,13 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: 推送hexo源文件
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.token }}
-          repository: ${{ env.BLOG_SOURCE }}
       - name: Build and Deploy
         # 使用专门部署 Hexo 到 GitHub pages 的 action（可以fork后根据需要修改）
         uses: xjshi/hexo-deploy-github-pages-action@master
@@ -23,6 +16,14 @@ jobs:
           PUBLISH_REPOSITORY: fengqishiwangxiangni/fengqishiwangxiangni.github.io # 网页库，格式：用户名/仓库名
           BRANCH: main # 构建后的网页要推送到网页库的分支
           PUBLISH_DIR: ./public # 部署 public 目录下的文件，hexo 一般都是这个目录，可根据实际调整
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: 推送hexo源文件
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.token }}
+          repository: ${{ env.BLOG_SOURCE }}
+
       - name: Setup Deploy Private Key
         env:
           HEXO_DEPLOY_PRIVATE_KEY: ${{ secrets.HEXO_DEPLOY_PRIVATE_KEY }}
