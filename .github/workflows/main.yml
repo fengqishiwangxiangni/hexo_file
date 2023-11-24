@@ -41,7 +41,7 @@ jobs:
 
     - name: Deploy Hexo
       run: |
-        hexo clean
-        hexo generate
+        hexo c
         git clone https://github.com/fengqishiwangxiangni/fengqishiwangxiangni.github.io.git .deploy_git
+        hexo g
         hexo deploy
