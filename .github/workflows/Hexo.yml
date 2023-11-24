@@ -1,0 +1,83 @@
+  name: 自动部署
+
+on: 
+  push:
+    branches:
+      - main
+
+  release:
+    types:
+      - published
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 检查分支
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: 安装 Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: "12.x"
+
+    - name: 安装 Hexo 和 Gulp
+      run: |
+        npm install hexo-cli -g
+        npm install gulp-cli -g    
+
+    - name: 缓存依赖
+      uses: actions/cache@v2.1.1
+      id: cache-dependencies
+      with:
+        path: node_modules
+        key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}    
+        
+    - name: 安装依赖
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        export TZ='Asia/Shanghai'
+        npm install --save
+
+    - name: 生成静态文件并压缩
+      run: |
+        hexo clean
+        hexo bangumi -u
+        hexo generate
+        gulp
+    
+    - name: 部署
+      run: |
+        git config --global user.name "fengqishiwangxiangni"
+        git config --global user.email "2039759240@qq.com"
+        # git clone https://github.com/fengqishiwangxiangni/fengqishiwangxiangni.github.io.git .deploy_git
+        hexo deploy
+
+    # - name: 同步到 Gitee
+    #   uses: wearerequired/git-mirror-action@master
+    #   env:
+    #       # 注意在 Settings->Secrets 配置 GITEE_RSA_PRIVATE_KEY
+    #       SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
+    #   with:
+    #       # 注意替换为你的 GitHub 源仓库地址
+    #       source-repo: "git@github.com:zykjofficial/zykjofficial.github.io.git"
+    #       # 注意替换为你的 Gitee 目标仓库地址
+    #       destination-repo: "git@gitee.com:zykjofficial/zykjofficial.git"
+
+    # - name: 构建 Gitee Pages
+    #   uses: yanglbme/gitee-pages-action@master
+    #   with:
+    #       # 注意替换为你的 Gitee 用户名
+    #       gitee-username: zykjofficial
+    #       # 注意在 Settings->Secrets 配置 GITEE_PASSWORD
+    #       gitee-password: ${{ secrets.GITEE_PASSWORD }}
+    #       # 注意替换为你的 Gitee 仓库
+    #       gitee-repo: zykjofficial/zykjofficial
+    
+    - name: 刷新缓存
+      run: |
+        curl https://purge.jsdelivr.net/gh/fengqishiwangxiangni/fengqishiwangxiangni.github.io@master/css/*.*
+        curl https://purge.jsdelivr.net/gh/fengqishiwangxiangni/fengqishiwangxiangni.github.io@master/js/*.*
+        curl https://purge.jsdelivr.net/gh/fengqishiwangxiangni/fengqishiwangxiangni.github.io@master/img/*.*       
