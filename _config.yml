@@ -115,7 +115,9 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: git@github.com:wbupt/wbupt.github.io.git
+  # repo: git@github.com:wbupt/wbupt.github.io.git
+  # repo: https://github.com/fengqishiwangxiangni/fengqishiwangxiangni.github.io.git
+  repo: git@github.com:fengqishiwangxiangni/fengqishiwangxiangni.github.io.git
   branch: main
 
 math:
